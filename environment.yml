@@ -1,0 +1,17 @@
+name: censusapi
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - numpy
+  - pandas
+  - scikit-learn
+  - pytest
+  - requests
+  - fastapi=0.63.0
+  - uvicorn
+  - gunicorn
+  - mlflow=2.6.0
+  - jupyter
+  - hydra-core
