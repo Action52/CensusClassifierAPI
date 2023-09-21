@@ -1,14 +1,20 @@
+"""
+This script trains the model and saves it.
+
+Script originally taken from https://github.com/udacity/nd0821-c3-starter-code.
+Modified by Luis Alfredo León
+"""
+
 # Script to train machine learning model.
 from pathlib import Path
 
 import joblib
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Add the necessary imports for the starter code.
 from ml.data import process_data
-from ml.model import train_model, log_slice_performance, compute_model_metrics
-
-import pandas as pd
+from ml.model import compute_model_metrics, log_slice_performance, train_model
 
 home_path = Path(__file__).cwd()
 
@@ -36,8 +42,12 @@ X_train, y_train, encoder, lb = process_data(
 
 # Proces the test data with the process_data function.
 X_test, y_test, encoder_test, lb_test = process_data(
-    test, categorical_features=cat_features, label="salary", training=False,
-    encoder=encoder, lb=lb
+    test,
+    categorical_features=cat_features,
+    label="salary",
+    training=False,
+    encoder=encoder,
+    lb=lb,
 )
 
 
@@ -51,10 +61,10 @@ joblib.dump(encoder, encoder_path)
 joblib.dump(lb, lb_path)
 
 # Log the performance on a particular slice
-log_slice_performance(model, test, encoder, lb, slice_by="race",
-                      cat_features=cat_features)
+log_slice_performance(
+    model, test, encoder, lb, slice_by="race", cat_features=cat_features
+)
 
 # Print the test results
 fbeta, precision, recall = compute_model_metrics(y_test, model.predict(X_test))
 print(f"Test set metrics: {fbeta, precision, recall}")
-

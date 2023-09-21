@@ -1,12 +1,16 @@
+"""
+This script implements an API with FastAPI to be able to perform inference using
+our saved model.
+"""
+
 from pathlib import Path
 
+import joblib
+import pandas as pd
 from fastapi import FastAPI
 from pydantic import BaseModel
-import joblib
 
 from ml.model import process_data
-
-import pandas as pd
 
 app = FastAPI()
 
@@ -26,7 +30,12 @@ cat_features = [
     "native_country",
 ]
 
+
 class CensusRow(BaseModel):
+    """
+    Pydantic wrapper for an observation of the census.
+    """
+
     age: int
     workclass: str
     fnlgt: int
@@ -44,12 +53,21 @@ class CensusRow(BaseModel):
 
 
 @app.get("/")
-async def hello():
+async def hello() -> dict:
+    """
+    Simple get method to acknowledge the landing url of the api.
+    :return: dict with greeting.
+    """
     return {"greeting": "Welcome to the census data ML API."}
 
 
 @app.post("/infer")
-async def inference(body: CensusRow):
+async def inference(body: CensusRow) -> dict:
+    """
+    Post method to perform inference on an observation.
+    :param body: CensusRow with the columns of an observation X.
+    :return: dict with the prediction and with the original observation (body)
+    """
     with open(model_path, "rb") as model_file:
         model = joblib.load(model_file)
     with open(lb_path, "rb") as lb_file:
@@ -57,8 +75,13 @@ async def inference(body: CensusRow):
     with open(encoder_path, "rb") as encoder_file:
         encoder = joblib.load(encoder_file)
     X = pd.DataFrame(data=dict(body), index=[0])
-    X, y, encoder, lb = process_data(X, categorical_features=cat_features,
-                                     training=False, encoder=encoder, lb=lb)
+    X, y, encoder, lb = process_data(
+        X,
+        categorical_features=cat_features,
+        training=False,
+        encoder=encoder,
+        lb=lb,
+    )
     y_pred = model.predict(X)
     y_pred_label = lb.inverse_transform(y_pred)
     return {"prediction": y_pred_label[0], "body": body}
