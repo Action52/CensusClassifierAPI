@@ -3,7 +3,8 @@
 ## Description
 
 The CensusClassifier API predicts whether a person will earn a salary of >=50k per year based on their demographics. This project uses census data to train the underlying model and is served using FastAPI.
-
+Github link: https://github.com/Action52/CensusClassifierAPI.git
+Deployed API endpoint: https://censusclassifierapi.onrender.com/
 ## Installation 🛠️
 
 1. Clone the repository
