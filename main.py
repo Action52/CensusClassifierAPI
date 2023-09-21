@@ -7,8 +7,9 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Body
+from pydantic import BaseModel, Field
+from typing_extensions import Annotated
 
 from ml.model import process_data
 
@@ -50,6 +51,30 @@ class CensusRow(BaseModel):
     capital_loss: int
     hours_per_week: int
     native_country: str
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "age": 52,
+                    "workclass": "Self-emp-inc",
+                    "fnlgt": 287927,
+                    "education": "HS-grad",
+                    "education_num": 9,
+                    "marital_status": "Married-civ-spouse",
+                    "occupation": "Exec-managerial",
+                    "relationship": "Wife",
+                    "race": "White",
+                    "sex": "Female",
+                    "capital_gain": 15024,
+                    "capital_loss": 0,
+                    "hours_per_week": 40,
+                    "native_country": "United-States",
+                }
+            ]
+        }
+    }
+
 
 
 @app.get("/")
