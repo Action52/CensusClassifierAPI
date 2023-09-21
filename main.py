@@ -76,7 +76,6 @@ class CensusRow(BaseModel):
     }
 
 
-
 @app.get("/")
 async def hello() -> dict:
     """

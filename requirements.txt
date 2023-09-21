@@ -3,9 +3,10 @@ pandas
 scikit-learn
 pytest
 requests
-fastapi==0.63.0
+fastapi==0.103.1
 uvicorn
 gunicorn
 mlflow==2.6.0
 jupyter
 hydra-core
+httpx
